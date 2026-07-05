@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - ÉroticaX</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #eee;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ff2d95;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            max-width: 600px;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #111;
+            color: #eee;
+            font-size: 15px;
+        }
+
+        button {
+            background: #ff2d95;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover { background: #e0247f; }
+
+        button.danger { background: #ff4444; }
+        button.danger:hover { background: #cc3333; }
+
+        button.secondary { background: #333; }
+        button.secondary:hover { background: #444; }
+
+        #login-screen, #admin-screen { display: none; }
+
+        .video-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .video-item img {
+            width: 80px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 12px;
+        }
+
+        .video-info { flex: 1; }
+        .video-info h4 { font-size: 15px; }
+        .video-info p { font-size: 13px; color: #888; }
+
+        .video-actions button {
+            width: auto;
+            padding: 8px 14px;
+            margin: 0 0 0 8px;
+            font-size: 13px;
+        }
+
+        #status-msg {
+            color: #ff2d95;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Écran de connexion -->
+    <div id="login-screen">
+        <div class="card">
+            <h1>Connexion Admin</h1>
+            <input type="email" id="email" placeholder="Email admin">
+            <input type="password" id="password" placeholder="Mot de passe">
+            <button onclick="login()">Se connecter</button>
+            <p id="login-error" style="color:#ff4444; margin-top:10px;"></p>
+        </div>
+    </div>
+
+    <!-- Écran admin -->
+    <div id="admin-screen">
+        <h1>Gestion des vidéos</h1>
+        <button class="secondary" style="max-width:200px;" onclick="logout()">Déconnexion</button>
+
+        <div class="card">
+            <h2 id="form-title">Ajouter une vidéo</h2>
+            <input type="hidden" id="edit-id">
+            <input type="text" id="v-title" placeholder="Titre">
+            <input type="text" id="v-duration" placeholder="Durée (ex: 12:34)">
+            <input type="number" id="v-views" placeholder="Nombre de vues">
+            <input type="text" id="v-thumbnail" placeholder="URL de l'image (thumbnail)">
+            <input type="text" id="v-videourl" placeholder="URL de la vidéo (optionnel)">
+            <button onclick="saveVideo()">Enregistrer</button>
+            <button class="secondary" onclick="resetForm()">Annuler modification</button>
+            <p id="status-msg"></p>
+        </div>
+
+        <div class="card" style="max-width:800px;">
+            <h2>Vidéos existantes</h2>
+            <div id="video-list">Chargement...</div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHYC3iV3Rl5UkA-fHfLNjoJoMi3JKChyM",
+            authDomain: "video-512e3.firebaseapp.com",
+            projectId: "video-512e3",
+            storageBucket: "video-512e3.firebasestorage.app",
+            messagingSenderId: "933879423406",
+            appId: "1:933879423406:web:b424d32be335b89a86683f"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        const ADMIN_EMAIL = "djelittoutcourt@gmail.com";
+
+        // Gestion affichage selon connexion
+        auth.onAuthStateChanged(user => {
+            if (user && user.email === ADMIN_EMAIL) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('admin-screen').style.display = 'block';
+                loadVideoList();
+            } else {
+                if (user) {
+                    // Connecté mais pas le bon email : déconnexion forcée
+                    auth.signOut();
+                }
+                document.getElementById('admin-screen').style.display = 'none';
+                document.getElementById('login-screen').style.display = 'block';
+            }
+        });
+
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('login-error');
+            errorEl.textContent = '';
+
+            if (email !== ADMIN_EMAIL) {
+                errorEl.textContent = "Accès refusé : ce compte n'est pas autorisé.";
+                return;
+            }
+
+            auth.signInWithEmailAndPassword(email, password)
+                .catch(err => {
+                    errorEl.textContent = "Erreur : " + err.message;
+                });
+        }
+
+        function logout() {
+            auth.signOut();
+        }
+
+        function resetForm() {
+            document.getElementById('edit-id').value = '';
+            document.getElementById('v-title').value = '';
+            document.getElementById('v-duration').value = '';
+            document.getElementById('v-views').value = '';
+            document.getElementById('v-thumbnail').value = '';
+            document.getElementById('v-videourl').value = '';
+            document.getElementById('form-title').textContent = 'Ajouter une vidéo';
+            document.getElementById('status-msg').textContent = '';
+        }
+
+        async function saveVideo() {
+            const id = document.getElementById('edit-id').value;
+            const data = {
+                title: document.getElementById('v-title').value,
+                duration: document.getElementById('v-duration').value,
+                views: parseInt(document.getElementById('v-views').value) || 0,
+                thumbnail: document.getElementById('v-thumbnail').value,
+                videoUrl: document.getElementById('v-videourl').value
+            };
+
+            const statusEl = document.getElementById('status-msg');
+
+            if (!data.title) {
+                statusEl.textContent = "Le titre est obligatoire.";
+                return;
+            }
+
+            try {
+                if (id) {
+                    await db.collection('videos').doc(id).update(data);
+                    statusEl.textContent = "Vidéo mise à jour !";
+                } else {
+                    await db.collection('videos').add(data);
+                    statusEl.textContent = "Vidéo ajoutée !";
+                }
+                resetForm();
+                loadVideoList();
+            } catch (e) {
+                statusEl.textContent = "Erreur : " + e.message;
+            }
+        }
+
+        function editVideo(id, data) {
+            document.getElementById('edit-id').value = id;
+            document.getElementById('v-title').value = data.title || '';
+            document.getElementById('v-duration').value = data.duration || '';
+            document.getElementById('v-views').value = data.views || 0;
+            document.getElementById('v-thumbnail').value = data.thumbnail || '';
+            document.getElementById('v-videourl').value = data.videoUrl || '';
+            document.getElementById('form-title').textContent = 'Modifier la vidéo';
+            window.scrollTo(0, 0);
+        }
+
+        async function deleteVideo(id) {
+            if (!confirm("Supprimer cette vidéo définitivement ?")) return;
+            try {
+                await db.collection('videos').doc(id).delete();
+                loadVideoList();
+            } catch (e) {
+                alert("Erreur : " + e.message);
+            }
+        }
+
+        async function loadVideoList() {
+            const listEl = document.getElementById('video-list');
+            try {
+                const snap = await db.collection('videos').orderBy('views', 'desc').get();
+                if (snap.empty) {
+                    listEl.innerHTML = '<p style="color:#888;">Aucune vidéo pour le moment.</p>';
+                    return;
+                }
+                listEl.innerHTML = '';
+                snap.forEach(doc => {
+                    const v = doc.data();
+                    const div = document.createElement('div');
+                    div.className = 'video-item';
+                    div.innerHTML = `
+                        <img src="${v.thumbnail || 'https://picsum.photos/id/1015/600/400'}">
+                        <div class="video-info">
+                            <h4>${v.title}</h4>
+                            <p>${v.duration || ''} • ${v.views || 0} vues</p>
+                        </div>
+                        <div class="video-actions">
+                            <button onclick='editVideo("${doc.id}", ${JSON.stringify(v).replace(/'/g, "&apos;")})'>Modifier</button>
+                            <button class="danger" onclick="deleteVideo('${doc.id}')">Supprimer</button>
+                        </div>
+                    `;
+                    listEl.appendChild(div);
+                });
+            } catch (e) {
+                listEl.innerHTML = '<p style="color:#ff4444;">Erreur de chargement : ' + e.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>

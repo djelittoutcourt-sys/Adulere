@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÉroticaX - Contenu Adulte Premium</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --bg: #0a0a0a;
+            --accent: #ff2d95;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: #eee;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+        
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .nav-links a {
+            color: #ddd;
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover { color: var(--accent); }
+        
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 4.5rem;
+            background: linear-gradient(90deg, #ff2d95, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .categories, .videos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .cat-card, .video-card {
+            border-radius: 12px;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+        
+        .thumbnail {
+            height: 180px;
+            background-size: cover;
+            position: relative;
+        }
+        
+        .thumbnail::after {
+            content: "▶";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .age-warning {
+            background: #ff4444;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <div class="age-warning">⚠️ 18+ UNIQUEMENT - Contenu sexuellement explicite</div>
+
+    <header>
+        <nav>
+            <a href="#" class="logo">ÉROTICAX</a>
+            <div class="nav-links">
+                <a href="#">Accueil</a>
+                <a href="#">Vidéos</a>
+                <a href="#">Live</a>
+                <a href="#">Catégories</a>
+                <a href="#">Premium</a>
+            </div>
+            <button id="auth-btn">Se connecter</button>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div style="max-width:800px; text-align:center;">
+            <h1>Le Plaisir Sans Limites</h1>
+            <p>Des milliers de vidéos HD, lives interactifs et contenu exclusif.</p>
+            <a href="#" class="btn">Accéder au contenu</a>
+        </div>
+    </section>
+
+    <section>
+        <h2 style="text-align:center; margin:3rem 0;">Catégories Populaires</h2>
+        <div class="categories" id="categories-container"></div>
+    </section>
+
+    <section style="background:#111;">
+        <h2 style="text-align:center; margin:3rem 0;">Vidéos Tendances</h2>
+        <div class="videos" id="videos-container"></div>
+    </section>
+
+    <footer style="text-align:center; padding:60px 20px; background:#050505;">
+        <p>© 2026 ÉroticaX - Démo Firebase</p>
+    </footer>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHYC3iV3Rl5UkA-fHfLNjoJoMi3JKChyM",
+            authDomain: "video-512e3.firebaseapp.com",
+            projectId: "video-512e3",
+            storageBucket: "video-512e3.firebasestorage.app",
+            messagingSenderId: "933879423406",
+            appId: "1:933879423406:web:b424d32be335b89a86683f"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        const authBtn = document.getElementById('auth-btn');
+
+        auth.onAuthStateChanged(user => {
+            authBtn.textContent = user ? "Déconnexion" : "Se connecter";
+            authBtn.onclick = user ? () => auth.signOut() : showAuthModal;
+        });
+
+        function showAuthModal() {
+            const email = prompt("Email:");
+            const password = prompt("Mot de passe:");
+            if (!email || !password) return;
+            
+            auth.signInWithEmailAndPassword(email, password).catch(err => {
+                if (confirm("Créer un nouveau compte ?")) {
+                    auth.createUserWithEmailAndPassword(email, password).then(() => alert("Compte créé !"));
+                }
+            });
+        }
+
+        async function loadVideos() {
+            const container = document.getElementById('videos-container');
+            try {
+                const snap = await db.collection('videos').orderBy('views', 'desc').limit(6).get();
+                container.innerHTML = '';
+                snap.forEach(doc => {
+                    const v = doc.data();
+                    container.innerHTML += `
+                        <div class="video-card">
+                            <div class="thumbnail" style="background:url('${v.thumbnail || "https://picsum.photos/id/1015/600/400"}') center/cover;"></div>
+                            <div style="padding:15px;">
+                                <h3>${v.title}</h3>
+                                <p style="color:#888;">${v.duration} • ${Math.floor((v.views||0)/1000)}k vues</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch(e) { console.error(e); }
+        }
+
+        // Chargement initial
+        window.onload = () => {
+            loadVideos();
+            console.log("%cÉroticaX + Firebase chargé", "color:#ff2d95;font-size:14px");
+        };
+    </script>
+</body>
+</html>
