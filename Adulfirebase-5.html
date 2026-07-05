@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÉroticaX - Contenu Adulte Premium</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --bg: #0a0a0a;
+            --accent: #ff2d95;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: #eee;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+        
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .nav-links a {
+            color: #ddd;
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover { color: var(--accent); }
+
+        #auth-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+
+        #auth-btn:hover {
+            background: #e0247f;
+        }
+        
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 4.5rem;
+            background: linear-gradient(90deg, #ff2d95, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .categories, .videos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .cat-card, .video-card {
+            border-radius: 12px;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+        
+        .thumbnail {
+            height: 180px;
+            background-size: cover;
+            position: relative;
+            transition: filter 0.3s;
+        }
+        
+        .thumbnail::after {
+            content: "▶";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .age-warning {
+            background: #ff4444;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+
+        .video-card {
+            cursor: pointer;
+        }
+
+        #video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #video-modal.active {
+            display: flex;
+        }
+
+        #video-modal video {
+            max-width: 95%;
+            max-height: 80vh;
+            border-radius: 8px;
+        }
+
+        #video-modal h3 {
+            color: white;
+            margin-top: 15px;
+            font-size: 1.2rem;
+        }
+
+        #video-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        #video-modal-message {
+            color: #ccc;
+            margin-top: 15px;
+            text-align: center;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="age-warning">⚠️ 18+ UNIQUEMENT - Contenu sexuellement explicite</div>
+
+    <!-- Lecteur vidéo modal -->
+    <div id="video-modal">
+        <button id="video-modal-close" onclick="closeVideoModal()">✕</button>
+        <video id="video-player" controls autoplay></video>
+        <p id="video-modal-message" style="display:none;"></p>
+        <h3 id="video-modal-title"></h3>
+    </div>
+
+    <header>
+        <nav>
+            <a href="#" class="logo" id="site-logo-link">ÉROTICAX</a>
+            <div class="nav-links">
+                <a href="#">Accueil</a>
+                <a href="#">Vidéos</a>
+                <a href="#">Live</a>
+                <a href="#">Catégories</a>
+                <a href="#" onclick="requirePremiumLogin(event)">Premium</a>
+            </div>
+            <button id="auth-btn">Se connecter</button>
+        </nav>
+    </header>
+
+    <section class="hero" id="hero-section">
+        <div style="max-width:800px; text-align:center;">
+            <h1 id="hero-title">Le Plaisir Sans Limites</h1>
+            <p id="hero-subtitle">Des milliers de vidéos HD, lives interactifs et contenu exclusif.</p>
+            <a href="#videos-container" class="btn" id="hero-button">Accéder au contenu</a>
+        </div>
+    </section>
+
+    <section>
+        <h2 style="text-align:center; margin:3rem 0;">Catégories Populaires</h2>
+        <div class="categories" id="categories-container"></div>
+    </section>
+
+    <section style="background:#111;">
+        <h2 style="text-align:center; margin:3rem 0;">Vidéos Tendances</h2>
+        <div class="videos" id="videos-container"></div>
+    </section>
+
+    <footer style="text-align:center; padding:60px 20px; background:#050505;">
+        <p id="footer-text">© 2026 ÉroticaX - Démo Firebase</p>
+    </footer>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHYC3iV3Rl5UkA-fHfLNjoJoMi3JKChyM",
+            authDomain: "video-512e3.firebaseapp.com",
+            projectId: "video-512e3",
+            storageBucket: "video-512e3.firebasestorage.app",
+            messagingSenderId: "933879423406",
+            appId: "1:933879423406:web:b424d32be335b89a86683f",
+            measurementId: "G-62DGZG2TH3"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const analytics = firebase.analytics();
+
+        const authBtn = document.getElementById('auth-btn');
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                authBtn.textContent = "★ Premium";
+                authBtn.title = "Cliquer pour se déconnecter";
+                authBtn.onclick = () => auth.signOut();
+            } else {
+                authBtn.textContent = "Se connecter";
+                authBtn.onclick = () => requirePremiumLogin();
+            }
+            loadVideos();
+        });
+
+        function requirePremiumLogin(e) {
+            if (e) e.preventDefault();
+
+            if (auth.currentUser) {
+                alert("Vous avez déjà accès au contenu Premium !");
+                return;
+            }
+
+            auth.signInWithPopup(googleProvider)
+                .then(result => {
+                    alert("Connecté avec " + result.user.displayName + " — Accès Premium activé !");
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Connexion annulée ou échouée : " + err.message);
+                });
+        }
+
+        async function loadVideos() {
+            const container = document.getElementById('videos-container');
+            const isLoggedIn = !!auth.currentUser;
+            try {
+                const snap = await db.collection('videos').orderBy('views', 'desc').limit(6).get();
+                container.innerHTML = '';
+                snap.forEach(doc => {
+                    const v = doc.data();
+                    const locked = v.isPremium && !isLoggedIn;
+                    const cardClick = locked 
+                        ? `requirePremiumLogin()` 
+                        : `playVideo(${JSON.stringify(v.videoUrl || '')}, ${JSON.stringify(v.title || '')})`;
+                    container.innerHTML += `
+                        <div class="video-card" onclick='${cardClick}'>
+                            <div class="thumbnail" style="background:url('${v.thumbnail || "https://picsum.photos/id/1015/600/400"}') center/cover; ${locked ? 'filter:blur(8px) brightness(0.5);' : ''}">
+                                ${v.isPremium ? `<span style="position:absolute; top:10px; right:10px; background:#ff2d95; color:white; font-size:11px; padding:4px 10px; border-radius:20px; font-weight:600; z-index:2;">★ PREMIUM</span>` : ''}
+                            </div>
+                            <div style="padding:15px;">
+                                <h3>${locked ? '🔒 Contenu réservé Premium' : v.title}</h3>
+                                <p style="color:#888;">${locked ? 'Connectez-vous pour débloquer' : v.duration + ' • ' + Math.floor((v.views||0)/1000) + 'k vues'}</p>
+                                ${!locked && v.description ? `<p style="color:#aaa; margin-top:8px; font-size:14px;">${v.description}</p>` : ''}
+                                ${locked ? `<button onclick="event.stopPropagation(); requirePremiumLogin()" style="margin-top:10px; background:var(--accent); color:white; border:none; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:600;">Débloquer</button>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch(e) { console.error(e); }
+        }
+
+        function playVideo(url, title) {
+            const modal = document.getElementById('video-modal');
+            const player = document.getElementById('video-player');
+            const message = document.getElementById('video-modal-message');
+            const titleEl = document.getElementById('video-modal-title');
+
+            titleEl.textContent = title || '';
+
+            if (url) {
+                player.style.display = 'block';
+                message.style.display = 'none';
+                player.src = url;
+                player.play().catch(() => {});
+            } else {
+                player.style.display = 'none';
+                message.style.display = 'block';
+                message.textContent = "Aucune vidéo n'a encore été associée à ce contenu.";
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('video-modal');
+            const player = document.getElementById('video-player');
+            player.pause();
+            player.src = '';
+            modal.classList.remove('active');
+        }
+
+        async function loadSiteSettings() {
+            try {
+                const doc = await db.collection('settings').doc('site').get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.heroImage) {
+                        const heroSection = document.getElementById('hero-section');
+                        heroSection.style.background = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('${data.heroImage}') center/cover no-repeat`;
+                    }
+                    if (data.logoImage) {
+                        const logoEl = document.getElementById('site-logo-link');
+                        logoEl.innerHTML = `<img src="${data.logoImage}" alt="Logo" style="height:40px; vertical-align:middle;">`;
+                    }
+                    if (data.heroTitle) {
+                        document.getElementById('hero-title').textContent = data.heroTitle;
+                    }
+                    if (data.heroSubtitle) {
+                        document.getElementById('hero-subtitle').textContent = data.heroSubtitle;
+                    }
+                    if (data.heroButtonText) {
+                        document.getElementById('hero-button').textContent = data.heroButtonText;
+                    }
+                    if (data.footerText) {
+                        document.getElementById('footer-text').textContent = data.footerText;
+                    }
+                }
+            } catch(e) { console.error("Erreur chargement paramètres :", e); }
+        }
+
+        // Chargement initial
+        window.onload = () => {
+            loadVideos();
+            loadSiteSettings();
+            console.log("%cÉroticaX + Firebase chargé", "color:#ff2d95;font-size:14px");
+        };
+    </script>
+</body>
+</html>
