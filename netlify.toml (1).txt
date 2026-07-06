@@ -1,0 +1,16 @@
+[build]
+  functions = "netlify/functions"
+
+[functions]
+  # Permet à la fonction d'accéder au fichier index.html à côté d'elle
+  included_files = ["index.html"]
+
+[[redirects]]
+  from = "/"
+  to = "/.netlify/functions/home"
+  status = 200
+
+[[redirects]]
+  from = "/index.html"
+  to = "/.netlify/functions/home"
+  status = 200

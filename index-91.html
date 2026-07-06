@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <title>ÉroticaX - Contenu Adulte Premium</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --bg: #0a0a0a;
+            --accent: #ff2d95;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: #eee;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+        
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .nav-links a {
+            color: #ddd;
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover { color: var(--accent); }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+                order: 3;
+            }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #0a0a0a;
+                border-bottom: 1px solid #333;
+                flex-direction: column;
+                padding: 10px 0;
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .nav-links a {
+                margin: 0;
+                padding: 14px 2rem;
+                border-bottom: 1px solid #1a1a1a;
+            }
+            nav {
+                flex-wrap: wrap;
+                position: relative;
+            }
+            #auth-btn {
+                order: 2;
+            }
+        }
+
+        #auth-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+
+        #auth-btn:hover {
+            background: #e0247f;
+        }
+        
+        #hero-section {
+            transition: background 0.4s ease-in-out;
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, #1a0a12, #0a0a0a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 4.5rem;
+            background: linear-gradient(90deg, #ff2d95, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .videos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .video-card {
+            cursor: pointer;
+        }
+
+        .video-card .thumbnail {
+            width: 100%;
+            height: 140px;
+        }
+
+        .video-info-block {
+            padding: 10px 2px;
+        }
+
+        .video-info-block h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-info-block .meta {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .video-info-block .meta svg {
+            width: 12px;
+            height: 12px;
+            fill: #888;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+        }
+
+        .play-overlay svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .cat-card, .video-card {
+            border-radius: 12px;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+        
+        .thumbnail {
+            height: 180px;
+            background-size: cover;
+            position: relative;
+            transition: filter 0.3s;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .cat-thumbnail {
+            height: 200px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .age-warning {
+            background: #ff4444;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+
+        .video-card {
+            cursor: pointer;
+        }
+
+        #video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #video-modal.active {
+            display: flex;
+        }
+
+        #video-modal video {
+            max-width: 95%;
+            max-height: 80vh;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .player-wrapper {
+            position: relative;
+            max-width: 95%;
+            max-height: 80vh;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .custom-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 16px 12px;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+            box-sizing: border-box;
+        }
+
+        .ctrl-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+
+        .ctrl-btn:hover { opacity: 1; }
+
+        .ctrl-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        #progress-bar {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.3);
+            outline: none;
+            cursor: pointer;
+        }
+
+        #progress-bar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 0 4px rgba(0,0,0,0.5);
+        }
+
+        #progress-bar::-moz-range-thumb {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: none;
+            cursor: pointer;
+        }
+
+        #time-display {
+            color: #ddd;
+            font-size: 12px;
+            white-space: nowrap;
+            min-width: 82px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+
+        #video-modal h3 {
+            color: white;
+            margin-top: 15px;
+            font-size: 1.2rem;
+        }
+
+        #video-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        #video-modal-message {
+            color: #ccc;
+            margin-top: 15px;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        #login-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 11000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #login-modal.active { display: flex; }
+
+        .login-card {
+            background: #151515;
+            border-radius: 16px;
+            padding: 30px 25px;
+            max-width: 380px;
+            width: 100%;
+            position: relative;
+        }
+
+        .login-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 13px 14px;
+            margin-bottom: 14px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #0a0a0a;
+            color: #eee;
+            font-size: 15px;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 44px;
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-top: -7px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+        }
+
+        .eye-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #999;
+        }
+
+        .login-card button.submit-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 50px;
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+
+        .login-card button.submit-btn:hover {
+            background: #e0247f;
+        }
+
+        .login-alt {
+            text-align: center;
+            font-size: 13px;
+            color: #999;
+            margin-top: 14px;
+        }
+
+        .login-alt a {
+            color: var(--accent);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .login-alt a:hover {
+            text-decoration: underline;
+        }
+
+        #login-status {
+            text-align: center;
+            font-size: 13px;
+            margin-top: 12px;
+            color: var(--accent);
+            min-height: 16px;
+        }
+
+        #login-close {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+
+        #plan-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 11000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #plan-modal.active { display: flex; }
+
+        .plan-card {
+            background: #151515;
+            border-radius: 16px;
+            padding: 30px 25px;
+            max-width: 420px;
+            width: 100%;
+            position: relative;
+        }
+
+        .plan-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .plan-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .plan-option:last-of-type {
+            border-bottom: none;
+        }
+
+        .plan-option h3 {
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .plan-price {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .plan-pay-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .plan-pay-btn:hover {
+            background: #e0247f;
+        }
+
+        #plan-status {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 16px;
+        }
+
+        #plan-close {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="age-warning">⚠️ 18+ UNIQUEMENT - Contenu sexuellement explicite</div>
+
+    <!-- Lecteur vidéo modal -->
+    <div id="video-modal">
+        <button id="video-modal-close" onclick="closeVideoModal()">✕</button>
+        <div class="player-wrapper" id="player-wrapper">
+            <video id="video-player" playsinline></video>
+            <div class="custom-controls" id="custom-controls">
+                <button class="ctrl-btn" id="play-pause-btn">
+                    <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <svg id="pause-icon" viewBox="0 0 24 24" style="display:none;"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+                </button>
+                <span id="time-display">0:00 / 0:00</span>
+                <input type="range" id="progress-bar" min="0" max="100" value="0" step="0.1">
+                <button class="ctrl-btn" id="volume-btn">
+                    <svg id="volume-icon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M16.5 12c0-1.77-.77-3.29-2-4.24v8.48c1.23-.95 2-2.47 2-4.24z"/></svg>
+                    <svg id="mute-icon" viewBox="0 0 24 24" style="display:none;"><path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M19 6.41L17.59 5 15 7.59 12.41 5 11 6.41 13.59 9 11 11.59 12.41 13 15 10.41 17.59 13 19 11.59 16.41 9z"/></svg>
+                </button>
+                <button class="ctrl-btn" id="fullscreen-btn">
+                    <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                </button>
+            </div>
+        </div>
+        <p id="video-modal-message" style="display:none;"></p>
+        <h3 id="video-modal-title"></h3>
+    </div>
+
+    <!-- Fenêtre de connexion -->
+    <div id="login-modal">
+        <div class="login-card">
+            <button id="login-close">✕</button>
+            <h2 id="login-title">Connexion</h2>
+            <input type="email" id="login-email" placeholder="Adresse email" autocomplete="email">
+            <div class="password-wrapper">
+                <input type="password" id="login-password" placeholder="Mot de passe" autocomplete="current-password">
+                <button type="button" class="eye-btn" id="toggle-password">
+                    <svg id="eye-open" viewBox="0 0 24 24"><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 110-10 5 5 0 010 10zm0-8a3 3 0 100 6 3 3 0 000-6z"/></svg>
+                    <svg id="eye-closed" viewBox="0 0 24 24" style="display:none;"><path d="M2 4.27L3.28 3 21 20.72 19.73 22l-3.08-3.08A11.6 11.6 0 0112 20C5 20 2 13 2 13a18.6 18.6 0 014.06-5.66L2 4.27zM12 6a7 7 0 016.32 4.02 8.9 8.9 0 01-1.62 2.53l-1.47-1.47A3 3 0 0012 9a3 3 0 00-.53.05L9.6 7.18A6.9 6.9 0 0112 6zm-2.83 3.76l1.6 1.6a3 3 0 003.87 3.87l1.6 1.6A6.98 6.98 0 0112 17a7 7 0 01-6.32-9.98 8.9 8.9 0 011.49-2.26z"/></svg>
+                </button>
+            </div>
+            <button class="submit-btn" id="login-submit">Se connecter</button>
+            <p class="login-alt"><a id="forgot-password-link">Mot de passe oublié ?</a></p>
+            <p class="login-alt" id="toggle-mode-text">Pas de compte ? <a id="toggle-signup">Créer un compte</a></p>
+            <p id="login-status"></p>
+        </div>
+    </div>
+
+    <!-- Fenêtre de choix d'abonnement Premium -->
+    <div id="plan-modal">
+        <div class="plan-card">
+            <button id="plan-close">✕</button>
+            <h2>Choisis ton abonnement Premium</h2>
+
+            <div class="plan-option">
+                <div>
+                    <h3>1 mois</h3>
+                    <p class="plan-price">9,99 €</p>
+                </div>
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" class="paypal-form" data-plan="month1">
+                    <input type="hidden" name="cmd" value="_xclick">
+                    <input type="hidden" name="business" value="drlunacycle@gmail.com">
+                    <input type="hidden" name="item_name" value="Abonnement Premium 1 mois - ÉroticaX">
+                    <input type="hidden" name="amount" value="9.99">
+                    <input type="hidden" name="currency_code" value="EUR">
+                    <input type="hidden" name="return" class="return-input">
+                    <input type="hidden" name="cancel_return" class="cancel-input">
+                    <button type="submit" class="plan-pay-btn">Payer</button>
+                </form>
+            </div>
+
+            <div class="plan-option">
+                <div>
+                    <h3>3 mois</h3>
+                    <p class="plan-price">19,99 €</p>
+                </div>
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" class="paypal-form" data-plan="month3">
+                    <input type="hidden" name="cmd" value="_xclick">
+                    <input type="hidden" name="business" value="drlunacycle@gmail.com">
+                    <input type="hidden" name="item_name" value="Abonnement Premium 3 mois - ÉroticaX">
+                    <input type="hidden" name="amount" value="19.99">
+                    <input type="hidden" name="currency_code" value="EUR">
+                    <input type="hidden" name="return" class="return-input">
+                    <input type="hidden" name="cancel_return" class="cancel-input">
+                    <button type="submit" class="plan-pay-btn">Payer</button>
+                </form>
+            </div>
+
+            <div class="plan-option">
+                <div>
+                    <h3>1 an</h3>
+                    <p class="plan-price">49,99 €</p>
+                </div>
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" class="paypal-form" data-plan="year1">
+                    <input type="hidden" name="cmd" value="_xclick">
+                    <input type="hidden" name="business" value="drlunacycle@gmail.com">
+                    <input type="hidden" name="item_name" value="Abonnement Premium 1 an - ÉroticaX">
+                    <input type="hidden" name="amount" value="49.99">
+                    <input type="hidden" name="currency_code" value="EUR">
+                    <input type="hidden" name="return" class="return-input">
+                    <input type="hidden" name="cancel_return" class="cancel-input">
+                    <button type="submit" class="plan-pay-btn">Payer</button>
+                </form>
+            </div>
+
+            <p id="plan-status">Paiement sécurisé via PayPal</p>
+        </div>
+    </div>
+
+    <header>
+        <nav>
+            <a href="#" class="logo" id="site-logo-link">ÉROTICAX</a>
+            <div class="nav-links" id="nav-links">
+                <a href="#">Accueil</a>
+                <a href="videos.html">Vidéos</a>
+                <a href="#" onclick="showLiveMessage(event)">Live</a>
+                <a href="#categories-section">Catégories</a>
+                <a href="#" onclick="requirePremiumLogin(event)">Premium</a>
+            </div>
+            <button id="auth-btn">Se connecter</button>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Menu">☰</button>
+        </nav>
+    </header>
+
+    <section class="hero" id="hero-section">
+        <div style="max-width:800px; text-align:center;">
+            <h1 id="hero-title">Le Plaisir Sans Limites</h1>
+            <p id="hero-subtitle">Des milliers de vidéos HD, lives interactifs et contenu exclusif.</p>
+            <a href="videos.html" class="btn" id="hero-button">Accéder au contenu</a>
+        </div>
+    </section>
+
+    <section id="categories-section" style="scroll-margin-top: 90px;">
+        <h2 style="text-align:center; margin:3rem 0;">Catégories Populaires</h2>
+        <div class="categories" id="categories-container">
+            <p style="text-align:center; color:#888; grid-column:1/-1;">Chargement des catégories...</p>
+        </div>
+    </section>
+
+    <section style="background:#111;">
+        <h2 style="text-align:center; margin:3rem 0;">Vidéos Tendances</h2>
+        <div class="videos" id="videos-container">
+            <p style="text-align:center; color:#888; grid-column:1/-1;">Chargement des vidéos...</p>
+        </div>
+    </section>
+
+    <footer style="text-align:center; padding:60px 20px; background:#050505;">
+        <p id="footer-text">© 2026 ÉroticaX - Tous droits réservés</p>
+    </footer>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics-compat.js" defer></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHYC3iV3Rl5UkA-fHfLNjoJoMi3JKChyM",
+            authDomain: "video-512e3.firebaseapp.com",
+            projectId: "video-512e3",
+            storageBucket: "video-512e3.firebasestorage.app",
+            messagingSenderId: "933879423406",
+            appId: "1:933879423406:web:b424d32be335b89a86683f",
+            measurementId: "G-62DGZG2TH3"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        db.enablePersistence().catch(() => {
+            // Ignoré si plusieurs onglets ouverts ou navigateur non compatible : le site fonctionne quand même normalement, juste sans le cache local
+        });
+        const auth = firebase.auth();
+        // Analytics est chargé en differé (non-bloquant), on l'initialise une fois prêt
+        window.addEventListener('load', () => {
+            if (firebase.analytics) firebase.analytics();
+        });
+
+        const authBtn = document.getElementById('auth-btn');
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        menuToggle.onclick = () => {
+            navLinks.classList.toggle('open');
+        };
+
+        // Ferme le menu mobile après avoir cliqué un lien
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => navLinks.classList.remove('open'));
+        });
+
+        function showLiveMessage(e) {
+            e.preventDefault();
+            alert("La fonctionnalité Live arrive bientôt !");
+        }
+
+        let userPremiumUntil = null;
+        let pendingShowPlans = false;
+
+        function isUserPremiumActive() {
+            return userPremiumUntil && userPremiumUntil.getTime() > Date.now();
+        }
+
+        async function checkPremiumStatus() {
+            if (!auth.currentUser) { userPremiumUntil = null; return; }
+            try {
+                const doc = await db.collection('subscribers').doc(auth.currentUser.uid).get();
+                userPremiumUntil = (doc.exists && doc.data().premiumUntil) ? new Date(doc.data().premiumUntil) : null;
+            } catch (e) {
+                console.error(e);
+                userPremiumUntil = null;
+            }
+        }
+
+        async function handlePaypalReturn() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('premium_success') === '1' && auth.currentUser) {
+                const plan = params.get('plan');
+                const durations = {
+                    month1: 30 * 24 * 60 * 60 * 1000,
+                    month3: 90 * 24 * 60 * 60 * 1000,
+                    year1: 365 * 24 * 60 * 60 * 1000
+                };
+                const durationMs = durations[plan];
+                if (durationMs) {
+                    const base = isUserPremiumActive() ? userPremiumUntil.getTime() : Date.now();
+                    const newUntil = base + durationMs;
+                    await db.collection('subscribers').doc(auth.currentUser.uid).set({ premiumUntil: newUntil }, { merge: true });
+                    userPremiumUntil = new Date(newUntil);
+                    alert("Paiement confirmé ! Accès Premium actif jusqu'au " + userPremiumUntil.toLocaleDateString('fr-FR'));
+                }
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        }
+
+        auth.onAuthStateChanged(async user => {
+            if (user) {
+                authBtn.textContent = "★ Premium";
+                authBtn.title = "Cliquer pour se déconnecter";
+                authBtn.onclick = () => auth.signOut();
+            } else {
+                authBtn.textContent = "Se connecter";
+                authBtn.title = "";
+                authBtn.onclick = () => requirePremiumLogin();
+            }
+
+            await checkPremiumStatus();
+            await handlePaypalReturn();
+            loadVideos(); // rafraîchit avec le bon statut premium (cadenas)
+
+            if (pendingShowPlans && user) {
+                pendingShowPlans = false;
+                openPlanModal();
+            }
+        });
+
+        // --- Fenêtre de connexion custom ---
+        const loginModal = document.getElementById('login-modal');
+        const loginEmail = document.getElementById('login-email');
+        const loginPassword = document.getElementById('login-password');
+        const loginSubmit = document.getElementById('login-submit');
+        const loginStatus = document.getElementById('login-status');
+        const loginTitle = document.getElementById('login-title');
+        const toggleModeText = document.getElementById('toggle-mode-text');
+        const forgotPasswordLink = document.getElementById('forgot-password-link');
+        const togglePasswordBtn = document.getElementById('toggle-password');
+        const eyeOpen = document.getElementById('eye-open');
+        const eyeClosed = document.getElementById('eye-closed');
+
+        let loginMode = 'login'; // ou 'signup'
+
+        function openLoginModal() {
+            loginMode = 'login';
+            loginTitle.textContent = 'Connexion';
+            loginSubmit.textContent = 'Se connecter';
+            toggleModeText.innerHTML = 'Pas de compte ? <a id="toggle-signup">Créer un compte</a>';
+            loginStatus.textContent = '';
+            loginEmail.value = '';
+            loginPassword.value = '';
+            loginModal.classList.add('active');
+            attachToggleSignupHandler();
+        }
+
+        function requirePremiumLogin(e) {
+            if (e) e.preventDefault();
+
+            if (!auth.currentUser) {
+                pendingShowPlans = true;
+                openLoginModal();
+                return;
+            }
+
+            if (isUserPremiumActive()) {
+                alert("Vous avez déjà un abonnement actif jusqu'au " + userPremiumUntil.toLocaleDateString('fr-FR') + " !");
+                return;
+            }
+
+            openPlanModal();
+        }
+
+
+        function closeLoginModal() {
+            loginModal.classList.remove('active');
+        }
+
+        document.getElementById('login-close').onclick = closeLoginModal;
+
+        // --- Fenêtre de choix d'abonnement ---
+        const planModal = document.getElementById('plan-modal');
+
+        function openPlanModal() {
+            document.getElementById('plan-status').textContent = 'Paiement sécurisé via PayPal';
+            planModal.classList.add('active');
+        }
+
+        function closePlanModal() {
+            planModal.classList.remove('active');
+        }
+
+        document.getElementById('plan-close').onclick = closePlanModal;
+
+        // Configure dynamiquement les URLs de retour PayPal
+        document.querySelectorAll('.paypal-form').forEach(form => {
+            const plan = form.dataset.plan;
+            form.querySelector('.return-input').value = window.location.origin + '/index.html?premium_success=1&plan=' + plan;
+            form.querySelector('.cancel-input').value = window.location.origin + '/index.html';
+        });
+
+        togglePasswordBtn.onclick = () => {
+            const isPassword = loginPassword.type === 'password';
+            loginPassword.type = isPassword ? 'text' : 'password';
+            eyeOpen.style.display = isPassword ? 'none' : 'block';
+            eyeClosed.style.display = isPassword ? 'block' : 'none';
+        };
+
+        function attachToggleSignupHandler() {
+            const link = document.getElementById('toggle-signup');
+            if (!link) return;
+            link.onclick = (e) => {
+                e.preventDefault();
+                loginMode = loginMode === 'login' ? 'signup' : 'login';
+                if (loginMode === 'signup') {
+                    loginTitle.textContent = 'Créer un compte';
+                    loginSubmit.textContent = 'Créer mon compte';
+                    toggleModeText.innerHTML = 'Déjà un compte ? <a id="toggle-signup">Se connecter</a>';
+                } else {
+                    loginTitle.textContent = 'Connexion';
+                    loginSubmit.textContent = 'Se connecter';
+                    toggleModeText.innerHTML = 'Pas de compte ? <a id="toggle-signup">Créer un compte</a>';
+                }
+                loginStatus.textContent = '';
+                attachToggleSignupHandler();
+            };
+        }
+
+        loginSubmit.onclick = () => {
+            const email = loginEmail.value.trim();
+            const password = loginPassword.value;
+            loginStatus.style.color = 'var(--accent)';
+
+            if (!email || !password) {
+                loginStatus.textContent = "Remplis l'email et le mot de passe.";
+                return;
+            }
+
+            if (loginMode === 'login') {
+                auth.signInWithEmailAndPassword(email, password)
+                    .then(() => {
+                        loginStatus.textContent = '';
+                        closeLoginModal();
+                    })
+                    .catch(err => {
+                        loginStatus.textContent = traduireErreur(err.code);
+                    });
+            } else {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then(() => {
+                        loginStatus.textContent = '';
+                        closeLoginModal();
+                        alert("Compte créé avec succès — Accès Premium activé !");
+                    })
+                    .catch(err => {
+                        loginStatus.textContent = traduireErreur(err.code);
+                    });
+            }
+        };
+
+        forgotPasswordLink.onclick = (e) => {
+            e.preventDefault();
+            const email = loginEmail.value.trim();
+            if (!email) {
+                loginStatus.style.color = 'var(--accent)';
+                loginStatus.textContent = "Entre ton email d'abord, puis reclique sur ce lien.";
+                return;
+            }
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    loginStatus.style.color = '#4caf50';
+                    loginStatus.textContent = "Email de réinitialisation envoyé !";
+                })
+                .catch(err => {
+                    loginStatus.style.color = 'var(--accent)';
+                    loginStatus.textContent = traduireErreur(err.code);
+                });
+        };
+
+        function traduireErreur(code) {
+            const messages = {
+                'auth/invalid-email': "Adresse email invalide.",
+                'auth/user-not-found': "Aucun compte avec cet email.",
+                'auth/wrong-password': "Mot de passe incorrect.",
+                'auth/email-already-in-use': "Un compte existe déjà avec cet email.",
+                'auth/weak-password': "Le mot de passe doit faire au moins 6 caractères.",
+                'auth/invalid-credential': "Email ou mot de passe incorrect."
+            };
+            return messages[code] || "Une erreur est survenue. Réessaie.";
+        }
+
+        function renderVideosList(videos) {
+            const container = document.getElementById('videos-container');
+            container.innerHTML = '';
+            videos.forEach(v => {
+                const locked = v.isPremium && !isUserPremiumActive();
+                const cardClick = locked 
+                    ? `requirePremiumLogin()` 
+                    : `playVideo(${JSON.stringify(v.videoUrl || '')}, ${JSON.stringify(v.title || '')})`;
+                container.innerHTML += `
+                    <div class="video-card" onclick='${cardClick}'>
+                        <div class="thumbnail" style="background:url('${v.thumbnail || "https://picsum.photos/id/1015/600/400"}') center/cover; ${locked ? 'filter:blur(8px) brightness(0.5);' : ''}">
+                            ${v.isPremium ? `<span style="position:absolute; top:8px; right:8px; background:#ff2d95; color:white; font-size:10px; padding:3px 8px; border-radius:20px; font-weight:600; z-index:2;">★ PREMIUM</span>` : ''}
+                            <div class="play-overlay">
+                                <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="rgba(0,0,0,0.45)" stroke="white" stroke-width="1.5"/><path d="M18 14l14 8-14 8V14z" fill="white"/></svg>
+                            </div>
+                        </div>
+                        <div class="video-info-block">
+                            <h3>${locked ? '🔒 Contenu réservé Premium' : v.title}</h3>
+                            <p class="meta">
+                                ${locked ? 'Connectez-vous pour débloquer' : `<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> ${v.duration || ''} • ${Math.floor((v.views||0)/1000)}k vues`}
+                            </p>
+                            ${locked ? `<button onclick="event.stopPropagation(); requirePremiumLogin()" style="margin-top:8px; background:var(--accent); color:white; border:none; padding:6px 12px; border-radius:20px; cursor:pointer; font-weight:600; font-size:12px;">Débloquer</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function loadVideos() {
+            try {
+                // Utilise les données préchargées côté serveur si elles sont disponibles (1ère fois seulement)
+                if (window.__PRELOADED__ && window.__PRELOADED__.videos && !window.__PRELOADED__._videosUsed) {
+                    window.__PRELOADED__._videosUsed = true;
+                    renderVideosList(window.__PRELOADED__.videos);
+                    return;
+                }
+                const snap = await db.collection('videos').orderBy('views', 'desc').limit(6).get();
+                const videos = [];
+                snap.forEach(doc => videos.push(doc.data()));
+                renderVideosList(videos);
+            } catch(e) { console.error(e); }
+        }
+
+        function formatTime(sec) {
+            if (isNaN(sec) || sec === Infinity) return "0:00";
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        const videoPlayerEl = document.getElementById('video-player');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const progressBarEl = document.getElementById('progress-bar');
+        const timeDisplayEl = document.getElementById('time-display');
+        const volumeBtn = document.getElementById('volume-btn');
+        const volumeIcon = document.getElementById('volume-icon');
+        const muteIcon = document.getElementById('mute-icon');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        const playerWrapperEl = document.getElementById('player-wrapper');
+
+        videoPlayerEl.addEventListener('play', () => {
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+        });
+        videoPlayerEl.addEventListener('pause', () => {
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+        });
+        videoPlayerEl.addEventListener('timeupdate', () => {
+            if (videoPlayerEl.duration) {
+                progressBarEl.value = (videoPlayerEl.currentTime / videoPlayerEl.duration) * 100;
+                timeDisplayEl.textContent = `${formatTime(videoPlayerEl.currentTime)} / ${formatTime(videoPlayerEl.duration)}`;
+            }
+        });
+
+        playPauseBtn.onclick = () => {
+            if (videoPlayerEl.paused) videoPlayerEl.play(); else videoPlayerEl.pause();
+        };
+
+        progressBarEl.oninput = () => {
+            if (videoPlayerEl.duration) {
+                videoPlayerEl.currentTime = (progressBarEl.value / 100) * videoPlayerEl.duration;
+            }
+        };
+
+        volumeBtn.onclick = () => {
+            videoPlayerEl.muted = !videoPlayerEl.muted;
+            volumeIcon.style.display = videoPlayerEl.muted ? 'none' : 'block';
+            muteIcon.style.display = videoPlayerEl.muted ? 'block' : 'none';
+        };
+
+        fullscreenBtn.onclick = () => {
+            if (playerWrapperEl.requestFullscreen) playerWrapperEl.requestFullscreen();
+            else if (playerWrapperEl.webkitRequestFullscreen) playerWrapperEl.webkitRequestFullscreen();
+        };
+
+        function playVideo(url, title) {
+            const modal = document.getElementById('video-modal');
+            const player = videoPlayerEl;
+            const message = document.getElementById('video-modal-message');
+            const titleEl = document.getElementById('video-modal-title');
+
+            titleEl.textContent = title || '';
+
+            if (url) {
+                player.style.display = 'block';
+                document.getElementById('custom-controls').style.display = 'flex';
+                message.style.display = 'none';
+                player.src = url;
+                progressBarEl.value = 0;
+                timeDisplayEl.textContent = '0:00 / 0:00';
+                player.play().catch(() => {});
+            } else {
+                player.style.display = 'none';
+                document.getElementById('custom-controls').style.display = 'none';
+                message.style.display = 'block';
+                message.textContent = "Aucune vidéo n'a encore été associée à ce contenu.";
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('video-modal');
+            videoPlayerEl.pause();
+            videoPlayerEl.src = '';
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+            modal.classList.remove('active');
+        }
+
+        function applySiteSettings(data) {
+            if (!data) return;
+            if (data.heroImage) {
+                const heroSection = document.getElementById('hero-section');
+                const preload = new Image();
+                preload.onload = () => {
+                    heroSection.style.background = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('${data.heroImage}') center/cover no-repeat`;
+                };
+                preload.src = data.heroImage;
+            }
+            if (data.logoImage) {
+                document.getElementById('site-logo-link').innerHTML = `<img src="${data.logoImage}" alt="Logo" style="height:40px; vertical-align:middle;">`;
+            }
+            if (data.heroTitle) document.getElementById('hero-title').textContent = data.heroTitle;
+            if (data.heroSubtitle) document.getElementById('hero-subtitle').textContent = data.heroSubtitle;
+            if (data.heroButtonText) document.getElementById('hero-button').textContent = data.heroButtonText;
+            if (data.footerText) document.getElementById('footer-text').textContent = data.footerText;
+        }
+
+        async function loadSiteSettings() {
+            try {
+                if (window.__PRELOADED__ && window.__PRELOADED__.settings && !window.__PRELOADED__._settingsUsed) {
+                    window.__PRELOADED__._settingsUsed = true;
+                    applySiteSettings(window.__PRELOADED__.settings);
+                    return;
+                }
+                const doc = await db.collection('settings').doc('site').get();
+                if (doc.exists) applySiteSettings(doc.data());
+            } catch(e) { console.error("Erreur chargement paramètres :", e); }
+        }
+
+        function renderCategoriesList(cats) {
+            const container = document.getElementById('categories-container');
+            if (!cats.length) {
+                container.innerHTML = '<p style="text-align:center; color:#888; grid-column:1/-1;">Aucune catégorie pour le moment.</p>';
+                return;
+            }
+            const sorted = [...cats].sort((a, b) => a.name.localeCompare(b.name));
+            container.innerHTML = '';
+            sorted.forEach(cat => {
+                const bg = cat.image
+                    ? `url('${cat.image}') center/cover`
+                    : `linear-gradient(135deg, #ff2d95, #1a1a1a)`;
+                container.innerHTML += `
+                    <div class="cat-card" style="cursor:pointer;" onclick="window.location.href='videos.html?cat=${encodeURIComponent(cat.name)}'">
+                        <div class="cat-thumbnail" style="background:${bg};"></div>
+                        <div style="padding:15px; text-align:center;">
+                            <h3>${cat.name}</h3>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function loadCategories() {
+            try {
+                if (window.__PRELOADED__ && window.__PRELOADED__.categories && !window.__PRELOADED__._categoriesUsed) {
+                    window.__PRELOADED__._categoriesUsed = true;
+                    renderCategoriesList(window.__PRELOADED__.categories);
+                    return;
+                }
+                const snap = await db.collection('categories').get();
+                const cats = [];
+                snap.forEach(doc => cats.push({ name: doc.data().name, image: doc.data().image || '' }));
+                renderCategoriesList(cats);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Chargement initial : dès que le DOM est prêt, sans attendre images/polices.
+        // Les 3 chargements partent en parallèle pour un affichage le plus rapide possible.
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSiteSettings();
+            loadCategories();
+            loadVideos();
+            console.log("%cÉroticaX + Firebase chargé", "color:#ff2d95;font-size:14px");
+        });
+    </script>
+</body>
+</html>
