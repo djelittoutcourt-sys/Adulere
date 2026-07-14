@@ -27,7 +27,10 @@ exports.handler = async function () {
             db.collection('settings').doc('site').get(),
         ]);
 
-        const videos = videosSnap.docs.map(d => d.data());
+        // IMPORTANT : on garde l'id du document ici. Le JS client (loadVideos) en a besoin
+        // pour rendre les cartes cliquables (lecture, likes, favoris) — sans ça, les cartes
+        // préchargées s'affichaient mais restaient inertes.
+        const videos = videosSnap.docs.map(d => ({ id: d.id, ...d.data() }));
         const categories = categoriesSnap.docs.map(d => ({
             name: d.data().name,
             image: d.data().image || ''
@@ -36,8 +39,11 @@ exports.handler = async function () {
 
         const preloadScript = `<script>window.__PRELOADED__ = ${JSON.stringify({ videos, categories, settings })};</script>\n    `;
 
-        // Injecte le script de préchargement juste avant le tout premier <script> du fichier
-        html = html.replace('<script>', preloadScript + '<script>');
+        // Injecte le préchargement juste avant le script principal (celui qui contient
+        // firebaseConfig). On cible '<script defer>' précisément : index.html contient
+        // d'autres balises <script src="..."> (SDK Firebase) et une <script> tout à la fin
+        // (enregistrement du service worker) qu'il ne faut surtout pas confondre avec elle.
+        html = html.replace('<script defer>\n        const firebaseConfig', preloadScript + '<script defer>\n        const firebaseConfig');
     } catch (e) {
         // Si Firestore échoue côté serveur (ex: identifiants manquants), on renvoie quand même
         // le HTML normal : le JS client fera sa propre requête Firestore comme avant, en secours.
@@ -54,3 +60,4 @@ exports.handler = async function () {
         body: html
     };
 };
+
